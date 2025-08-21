@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stellar Events — Event Management Agency</title>
+  <meta name="description" content="Full-service event management for weddings, corporate events, and parties. Plan, design, and execute unforgettable experiences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --card: #12141a;
+      --muted: #7a8194;
+      --text: #eef0f5;
+      --brand: #7c3aed; /* purple */
+      --brand-2: #22d3ee; /* cyan */
+      --accent: #10b981; /* emerald */
+      --warning: #f59e0b; /* amber */
+      --danger: #ef4444; /* red */
+      --ring: rgba(124,58,237,.35);
+      --maxw: 1200px;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text); background: radial-gradient(1200px 600px at 80% -10%, rgba(124,58,237,.18), transparent 70%),
+      radial-gradient(900px 600px at -10% 10%, rgba(34,211,238,.16), transparent 60%), var(--bg);
+      line-height:1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container{ max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+    /* NAV */
+    .nav{ position: sticky; top:0; z-index: 50; backdrop-filter: blur(10px); background: rgba(11,12,16,.55); border-bottom: 1px solid rgba(255,255,255,.06); }
+    .nav-wrap{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px; font-size:20px; }
+    .brand-logo{ width:36px; height:36px; display:grid; place-items:center; border-radius:12px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: var(--shadow); }
+    .brand-logo svg{ filter: drop-shadow(0 4px 10px rgba(124,58,237,.4)); }
+    .nav ul{ display:flex; gap:20px; list-style:none; margin:0; padding:0; }
+    .nav a{ padding:8px 12px; border-radius: 999px; color: var(--text); opacity:.85; font-weight:600; }
+    .nav a:hover{ background: rgba(255,255,255,.06); opacity:1; }
+    .cta{ display:inline-flex; align-items:center; gap:8px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); border:none; color:white; padding:12px 18px; border-radius: 999px; font-weight:700; cursor:pointer; box-shadow: var(--shadow); }
+    .cta:hover{ transform: translateY(-1px); }
+    /* MOBILE MENU */
+    .menu-btn{ display:none; background:transparent; border:1px solid rgba(255,255,255,.15); padding:8px 10px; border-radius:12px; color:var(--text); }
+    @media (max-width: 840px){
+      .nav ul{ display:none; }
+      .menu-btn{ display:inline-flex; }
+      .mobile-menu{ position: fixed; inset: 64px 14px auto 14px; background: rgba(13,14,19,.97); border: 1px solid rgba(255,255,255,.06); border-radius:14px; box-shadow: var(--shadow); padding: 12px; display:none; flex-direction:column; gap:6px; }
+      .mobile-menu a{ padding:10px 12px; border-radius:10px; display:block; }
+      .mobile-menu a:hover{ background: rgba(255,255,255,.06); }
+    }
+    /* HERO */
+    .hero{ padding: 80px 0 40px; position:relative; overflow:hidden; }
+    .hero h1{ font-size: clamp(28px, 4.2vw, 54px); line-height:1.1; margin:0 0 14px; }
+    .hero p{ font-size: clamp(14px, 1.6vw, 18px); color: var(--muted); max-width: 720px; }
+    .hero-grid{ display:grid; grid-template-columns: 1.3fr .9fr; gap:26px; align-items:center; }
+    @media (max-width: 980px){ .hero-grid{ grid-template-columns: 1fr; } }
+    .hero-card{ background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)); border: 1px solid rgba(255,255,255,.08); padding: 18px; border-radius: var(--radius); display:grid; grid-template-columns: 60px 1fr; gap:14px; }
+    .hero-card .icon{ width:60px; height:60px; border-radius: 14px; display:grid; place-items:center; background: rgba(124,58,237,.15); }
+    .hero-media{ border-radius: var(--radius); height: 420px; background: radial-gradient(600px 200px at 30% 10%, rgba(124,58,237,.2), transparent 60%), linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.08); display:grid; place-items:center; position:relative; overflow:hidden; }
+    .stats{ display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin-top: 22px; }
+    .stat{ background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); padding: 16px; border-radius: 14px; text-align:center; }
+    .stat .v{ font-size: 22px; font-weight: 800; }
+    .stat .k{ color: var(--muted); font-weight:600; font-size: 12px; letter-spacing:.2px; }
+    /* SECTION */
+    section{ padding: 60px 0; }
+    .section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom: 20px; }
+    .section-head h2{ margin:0; font-size: clamp(22px, 3vw, 36px); }
+    .muted{ color: var(--muted); }
+    /* SERVICES */
+    .grid{ display:grid; gap:18px; }
+    .grid-3{ grid-template-columns: repeat(3, 1fr); }
+    .grid-4{ grid-template-columns: repeat(4, 1fr); }
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+    .card h3{ margin:8px 0 6px; font-size: 18px; }
+    .chip{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.35); font-weight:600; font-size:12px; }
+    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background: rgba(16,185,129,.15); border: 1px solid rgba(16,185,129,.35); font-weight:600; font-size:12px; }
+    /* EVENTS */
+    .event{ display:grid; grid-template-columns: 120px 1fr; gap:16px; align-items:center; }
+    .event .date{ width:120px; height:120px; border-radius: 16px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; font-weight:900; font-size: 24px; }
+    .event h4{ margin:0 0 6px; }
+    .event .meta{ color:var(--muted); font-size: 14px; }
+    /* TIMELINE */
+    .timeline{ position: relative; padding-left: 22px; }
+    .timeline:before{ content:""; position:absolute; left:7px; top:0; bottom:0; width:2px; background: linear-gradient(180deg, rgba(124,58,237,.7), transparent); }
+    .step{ position:relative; padding:10px 12px 10px 14px; margin-bottom:10px; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius: 12px; }
+    .step:before{ content:""; position:absolute; left:-16px; top:12px; width:10px; height:10px; border-radius:50%; background: var(--brand); box-shadow: 0 0 0 4px rgba(124,58,237,.2); }
+    /* GALLERY */
+    .gallery{ display:grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 120px; gap:8px; }
+    .tile{ border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.08); }
+    .tile.t2{ grid-column: span 2; grid-row: span 2; }
+    .tile.t3{ grid-column: span 3; grid-row: span 2; }
+    .tile.t1{ grid-column: span 1; grid-row: span 1; }
+    /* TESTIMONIALS */
+    .carousel{ position:relative; overflow:hidden; }
+    .slides{ display:flex; transition: transform .5s ease; }
+    .testimonial{ min-width:100%; padding: 18px; }
+    .quote{ font-size: 18px; font-weight:600; }
+    .who{ color: var(--muted); margin-top:8px; }
+    .dots{ display:flex; gap:6px; justify-content:center; margin-top: 10px; }
+    .dot{ width:8px; height:8px; border-radius:50%; background: rgba(255,255,255,.3); cursor:pointer; }
+    .dot.active{ background: white; }
+    /* PRICING */
+    .pricing{ display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+    .price{ padding: 20px; border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); }
+    .price h3{ margin:0 0 8px; }
+    .p-val{ font-size: 36px; font-weight:900; }
+    .ul{ list-style:none; padding:0; margin: 10px 0 0; display:grid; gap:8px; }
+    .ul li{ display:flex; align-items:center; gap:10px; }
+    .ul svg{ flex: 0 0 auto; }
+    /* CONTACT */
+    form{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    form .full{ grid-column: 1 / -1; }
+    input, textarea, select{
+      width:100%; padding:12px 14px; border-radius:12px; background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.12); color: var(--text); outline:none; font: inherit;
+    }
+    input:focus, textarea:focus, select:focus{ box-shadow: 0 0 0 6px var(--ring); border-color: var(--brand); }
+    textarea{ min-height: 120px; resize: vertical; }
+    .notice{ font-size: 12px; color: var(--muted); }
+    .footer{ padding: 40px 0; border-top: 1px solid rgba(255,255,255,.06); color: var(--muted); }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px){
+      .grid-3{ grid-template-columns: 1fr; }
+      .grid-4{ grid-template-columns: 1fr 1fr; }
+      .events{ grid-template-columns: 1fr; }
+      .pricing{ grid-template-columns: 1fr; }
+      form{ grid-template-columns: 1fr; }
+      .event{ grid-template-columns: 96px 1fr; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EventVenue",
+    "name": "Stellar Events",
+    "description": "Full-service event management agency",
+    "url": "https://example.com",
+    "address": {"@type":"PostalAddress","addressCountry":"IN"},
+    "sameAs": ["https://instagram.com/", "https://facebook.com/"]
+  }
+  </script>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="container nav-wrap">
+      <a href="#" class="brand">
+        <span class="brand-logo" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3l3.09 6.26L22 10.27l-5 4.87L18.18 22 12 18.77 5.82 22 7 15.14l-5-4.87 6.91-1.01L12 3z" fill="white"/>
+          </svg>
+        </span>
+        Stellar Events
+      </a>
+      <ul aria-label="Primary">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+      <button class="cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18M12 3l9 9-9 9" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        Get a Quote
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu container">
+      <a href="#services" onclick="toggleMenu()">Services</a>
+      <a href="#events" onclick="toggleMenu()">Events</a>
+      <a href="#process" onclick="toggleMenu()">Process</a>
+      <a href="#gallery" onclick="toggleMenu()">Gallery</a>
+      <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+      <a href="#contact" onclick="toggleMenu()">Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="chip">Award-winning event planners</div>
+        <h1>We plan, design, and deliver <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent;">unforgettable</span> events.</h1>
+        <p>From intimate weddings to large-scale corporate conferences, we handle every detail—venue, vendors, décor, A/V, hospitality—so you can be fully present on the day.</p>
+        <div style="display:flex; gap:12px; margin-top:16px;">
+          <button class="cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'});">View Packages</button>
+          <a class="pill" href="#gallery">See our work →</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="v">850+</div><div class="k">Events Delivered</div></div>
+          <div class="stat"><div class="v">98%</div><div class="k">Client Satisfaction</div></div>
+          <div class="stat"><div class="v">40+</div><div class="k">Trusted Vendors</div></div>
+          <div class="stat"><div class="v">12yrs</div><div class="k">Experience</div></div>
+        </div>
+      </div>
+      <div class="hero-media">
+        <!-- Decorative mock device / poster -->
+        <svg width="100%" height="100%" viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="Event montage">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="100%" stop-color="#22d3ee"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="20" width="560" height="380" rx="18" fill="url(#g1)" opacity=".18"/>
+          <g transform="translate(50,40)">
+            <rect width="220" height="140" rx="14" fill="white" opacity=".1"/>
+            <rect x="240" width="220" height="140" rx="14" fill="white" opacity=".08"/>
+            <rect y="160" width="160" height="100" rx="12" fill="white" opacity=".08"/>
+            <rect x="170" y="160" width="290" height="100" rx="12" fill="white" opacity=".1"/>
+            <rect y="270" width="460" height="70" rx="12" fill="white" opacity=".06"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="section-head">
+        <h2>Services</h2>
+        <p class="muted">End-to-end planning or just the pieces you need.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card">
+          <div class="chip">Weddings</div>
+          <h3>Wedding Planning & Décor</h3>
+          <p class="muted">Theme design, venue scouting, guest logistics, sangeet choreography, vendor management.</p>
+        </div>
+        <div class="card">
+          <div class="chip">Corporate</div>
+          <h3>Conferences & Offsites</h3>
+          <p class="muted">Stage/A&V, agenda design, speaker ops, brand booths, hybrid live-streams.</p>
+        </div>
+        <div class="card">
+          <div class="chip">Social</div>
+          <h3>Parties & Launches</h3>
+          <p class="muted">Birthdays, engagements, launches, cultural festivals, exhibition stalls.</p>
+        </div>
+        <div class="card">
+          <div class="chip">Add-ons</div>
+          <h3>Experiences</h3>
+          <p class="muted">Photo booths, live bands, celebrity hosts, fireworks, destination weddings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED EVENTS -->
+  <section id="events">
+    <div class="container">
+      <div class="section-head">
+        <h2>Featured Events</h2>
+        <p class="muted">A peek at recent productions we loved.</p>
+      </div>
+      <div class="grid grid-3 events">
+        <div class="card event">
+          <div class="date">SEP<br>14</div>
+          <div>
+            <h4>TechX Summit 2025</h4>
+            <div class="meta">Bangalore • 1,200 attendees • 2 stages</div>
+            <p class="muted">Full production: registration, stage design, speaker ops, live-stream.</p>
+          </div>
+        </div>
+        <div class="card event">
+          <div class="date">NOV<br>02</div>
+          <div>
+            <h4>Rohan × Ananya Wedding</h4>
+            <div class="meta">Udaipur • 3-day destination</div>
+            <p class="muted">Royal theme, baraat procession, lakefront pheras, after-party.</p>
+          </div>
+        </div>
+        <div class="card event">
+          <div class="date">DEC<br>18</div>
+          <div>
+            <h4>ZenLabs Product Launch</h4>
+            <div class="meta">Mumbai • 500 guests • Media</div>
+            <p class="muted">Immersive reveal with projection mapping and press lounge.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS / TIMELINE -->
+  <section id="process">
+    <div class="container">
+      <div class="section-head">
+        <h2>Our Process</h2>
+        <p class="muted">Transparent, collaborative, and stress-free.</p>
+      </div>
+      <div class="timeline">
+        <div class="step"><strong>1. Discovery</strong><br><span class="muted">Free consultation to understand your goals, guests, budget, and vibe.</span></div>
+        <div class="step"><strong>2. Concept & Budget</strong><br><span class="muted">Moodboards, theme options, venue shortlist, and a detailed cost breakdown.</span></div>
+        <div class="step"><strong>3. Vendor Lock-in</strong><br><span class="muted">We negotiate and manage décor, catering, entertainment, A/V, photography.</span></div>
+        <div class="step"><strong>4. Execution</strong><br><span class="muted">On-site production team, showflow, guest experience, minute-by-minute run of show.</span></div>
+        <div class="step"><strong>5. Post-Event</strong><br><span class="muted">Feedback, media handover, learnings for next time.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY GRID (placeholder tiles) -->
+  <section id="gallery">
+    <div class="container">
+      <div class="section-head">
+        <h2>Gallery</h2>
+        <p class="muted">Snapshots from set-ups and special moments.</p>
+      </div>
+      <div class="gallery">
+        <div class="tile t2"></div>
+        <div class="tile t1"></div>
+        <div class="tile t3"></div>
+        <div class="tile t1"></div>
+        <div class="tile t2"></div>
+        <div class="tile t1"></div>
+      </div>
+      <p class="notice" style="margin-top:10px;">Replace the tiles with real images by setting <code>background-image: url('...')</code> in CSS or placing <code>&lt;img&gt;</code> tags inside.</p>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="section-head">
+        <h2>Testimonials</h2>
+        <p class="muted">What our clients say.</p>
+      </div>
+      <div class="card carousel" aria-roledescription="carousel">
+        <div class="slides" id="slides">
+          <div class="testimonial">
+            <div class="quote">“Flawless execution. Our summit felt premium from registration to closing ceremony.”</div>
+            <div class="who">— Meera, COO at TechX</div>
+          </div>
+          <div class="testimonial">
+            <div class="quote">“They handled every detail. We actually enjoyed our own wedding!”</div>
+            <div class="who">— Rohan & Ananya</div>
+          </div>
+          <div class="testimonial">
+            <div class="quote">“Creative, calm, and super professional. Media loved the experience.”</div>
+            <div class="who">— Vikram, ZenLabs</div>
+          </div>
+        </div>
+      </div>
+      <div class="dots" id="dots" aria-label="Choose testimonial slide"></div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <div class="section-head">
+        <h2>Packages</h2>
+        <p class="muted">Transparent pricing. Custom quotes available.</p>
+      </div>
+      <div class="pricing">
+        <div class="price">
+          <div class="pill">Starter</div>
+          <h3>Social / Small Events</h3>
+          <div class="p-val">₹49,000</div>
+          <ul class="ul">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Concept & vendor shortlist
+            </li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Day-of coordination</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Up to 150 guests</li>
+          </ul>
+        </div>
+        <div class="price" style="border-color: rgba(124,58,237,.6); box-shadow: 0 0 0 2px rgba(124,58,237,.25);">
+          <div class="pill">Most Popular</div>
+          <h3>Signature</h3>
+          <div class="p-val">₹1,49,000</div>
+          <ul class="ul">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>End-to-end planning</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Custom décor & staging</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Up to 600 guests</li>
+          </ul>
+        </div>
+        <div class="price">
+          <div class="pill">Enterprise</div>
+          <h3>Corporate / Large</h3>
+          <div class="p-val">Custom</div>
+          <ul class="ul">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Multi-day conferences</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Hybrid / live-stream</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited guests</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-head">
+        <h2>Get a Free Quote</h2>
+        <p class="muted">Tell us a bit about your event. We’ll get back within 1 business day.</p>
+      </div>
+      <form id="quoteForm" onsubmit="return submitForm(event)">
+        <div>
+          <label for="name" class="muted">Your name</label>
+          <input id="name" name="name" required placeholder="e.g., Shivam Singh" />
+        </div>
+        <div>
+          <label for="email" class="muted">Email</label>
+          <input id="email" name="email" type="email" required placeholder="you@example.com" />
+        </div>
+        <div>
+          <label for="phone" class="muted">Phone</label>
+          <input id="phone" name="phone" type="tel" required placeholder="+91 98xxxxxxx" />
+        </div>
+        <div>
+          <label for="type" class="muted">Event type</label>
+          <select id="type" name="type" required>
+            <option value="">Select…</option>
+            <option>Wedding</option>
+            <option>Corporate</option>
+            <option>Social / Party</option>
+            <option>Festival / Expo</option>
+          </select>
+        </div>
+        <div>
+          <label for="date" class="muted">Event date</label>
+          <input id="date" name="date" type="date" required />
+        </div>
+        <div>
+          <label for="guests" class="muted">Guests</label>
+          <input id="guests" name="guests" type="number" min="10" max="5000" placeholder="e.g., 250" />
+        </div>
+        <div class="full">
+          <label for="message" class="muted">Tell us more</label>
+          <textarea id="message" name="message" placeholder="Share your vision, venue ideas, special requests..."></textarea>
+        </div>
+        <div class="full" style="display:flex; align-items:center; gap:10px;">
+          <input id="agree" type="checkbox" required />
+          <label for="agree" class="muted">I agree to be contacted about my inquiry.</label>
+        </div>
+        <div class="full" style="display:flex; gap:10px;">
+          <button class="cta" type="submit">Request Quote</button>
+          <span id="formNote" class="notice"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container" style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+      <div>© <span id="year"></span> Stellar Events • All rights reserved</div>
+      <div>
+        <a class="muted" href="#">Privacy</a> • 
+        <a class="muted" href="#">Terms</a> • 
+        <a class="muted" href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    function toggleMenu(){
+      const m = document.getElementById('mobileMenu');
+      const isOpen = m.style.display === 'flex';
+      m.style.display = isOpen ? 'none' : 'flex';
+    }
+
+    // Testimonials carousel
+    const slides = document.getElementById('slides');
+    const dotsWrap = document.getElementById('dots');
+    let idx = 0;
+    const total = slides ? slides.children.length : 0;
+
+    function go(i){
+      idx = (i + total) % total;
+      slides.style.transform = `translateX(-${idx * 100}%)`;
+      [...dotsWrap.children].forEach((d,di)=>d.classList.toggle('active', di===idx));
+    }
+
+    function setupDots(){
+      for(let i=0;i<total;i++){
+        const b = document.createElement('button');
+        b.className = 'dot' + (i===0?' active':'');
+        b.setAttribute('aria-label', 'Slide ' + (i+1));
+        b.onclick = ()=>go(i);
+        dotsWrap.appendChild(b);
+      }
+    }
+
+    if (slides) {
+      setupDots();
+      setInterval(()=>go(idx+1), 5000);
+    }
+
+    // Form (demo only)
+    function submitForm(e){
+      e.preventDefault();
+      const note = document.getElementById('formNote');
+      const form = document.getElementById('quoteForm');
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // Very light validation
+      if(!data.name || !data.email || !data.type){
+        note.textContent = 'Please fill all required fields.';
+        note.style.color = '#fca5a5';
+        return false;
+      }
+
+      note.textContent = 'Thanks! Your request has been recorded. We will reach out shortly.';
+      note.style.color = '#a7f3d0';
+
+      // Reset after a moment
+      setTimeout(()=>{ form.reset(); note.textContent=''; }, 3000);
+      return false;
+    }
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
